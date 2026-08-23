@@ -1,0 +1,119 @@
+/* Finder's Global Styles & Utilities */
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+}
+
+.animate-fadeIn {
+    animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slideUp {
+    animation: slideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+::-webkit-scrollbar-track {
+    background: #F1F5F9;
+}
+::-webkit-scrollbar-thumb {
+    background: #CBD5E1;
+    border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: #94A3B8;
+}
+
+/* Card Hover Elevation */
+.finder-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.finder-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+}
+
+/* Status Badges */
+.status-badge-REQUESTED {
+    background-color: #FEF3C7;
+    color: #92400E;
+    border: 1px solid #FCD34D;
+}
+.status-badge-ACCEPTED {
+    background-color: #DBEAFE;
+    color: #1E40AF;
+    border: 1px solid #93C5FD;
+}
+.status-badge-WORKER_ON_THE_WAY {
+    background-color: #E0E7FF;
+    color: #3730A3;
+    border: 1px solid #A5B4FC;
+}
+.status-badge-ARRIVED {
+    background-color: #EDE9FE;
+    color: #5B21B6;
+    border: 1px solid #C4B5FD;
+}
+.status-badge-IN_PROGRESS {
+    background-color: #FEF9C3;
+    color: #854D0E;
+    border: 1px solid #FDE047;
+}
+.status-badge-COMPLETED {
+    background-color: #DCFCE7;
+    color: #166534;
+    border: 1px solid #86EFAC;
+}
+.status-badge-REVIEWED {
+    background-color: #F0FDF4;
+    color: #15803D;
+    border: 1px solid #BBF7D0;
+}
+.status-badge-CANCELLED, .status-badge-DECLINED {
+    background-color: #FEE2E2;
+    color: #991B1B;
+    border: 1px solid #FCA5A5;
+}
+
+/* Timeline Progression Dots */
+.timeline-step-completed {
+    background-color: #2563EB;
+    color: white;
+    border-color: #2563EB;
+}
+.timeline-step-active {
+    background-color: #EFF6FF;
+    color: #2563EB;
+    border-color: #2563EB;
+    box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+}
+.timeline-step-pending {
+    background-color: #F8FAFC;
+    color: #94A3B8;
+    border-color: #E2E8F0;
+}
+
+/* Star Rating Selector */
+.star-btn {
+    transition: color 0.15s ease, transform 0.1s ease;
+}
+.star-btn:hover {
+    transform: scale(1.15);
+}
+
+/* Mobile responsive padding helpers */
+@media (max-width: 768px) {
+    main {
+        padding-bottom: 72px; /* Avoid overlapping mobile bottom bar */
+    }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "finders-platform",
+  "version": "1.0.0",
+  "description": "Finder's — Local Worker & Service Finder Platform",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "seed": "node database/seed.js",
+    "test": "node test_suite.js"
+  },
+  "keywords": [
+    "finders",
+    "local-services",
+    "worker-finder",
+    "home-services",
+    "marketplace"
+  ],
+  "author": "Finder's Engineering Team",
+  "license": "MIT"
+}

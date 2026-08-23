@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Finder's — Find the right person for the job.</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        navy: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            200: '#bcccdc',
+                            300: '#9fb3c8',
+                            400: '#829ab1',
+                            500: '#627d98',
+                            600: '#486581',
+                            700: '#334e68',
+                            800: '#1E293B',
+                            900: '#0F172A',
+                            950: '#0A1128'
+                        },
+                        brand: {
+                            blue: '#2563EB',
+                            blueDark: '#1D4ED8',
+                            blueLight: '#3B82F6',
+                            blueBg: '#EFF6FF'
+                        },
+                        cool: {
+                            50: '#F8FAFC',
+                            100: '#F1F5F9',
+                            200: '#E2E8F0',
+                            300: '#CBD5E1',
+                            400: '#94A3B8',
+                            500: '#64748B',
+                            600: '#475569'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body class="bg-cool-50 text-navy-900 font-sans antialiased min-h-screen flex flex-col selection:bg-brand-blue selection:text-white">
+
+    <!-- Top Toast Notification System -->
+    <div id="toastContainer" class="fixed top-5 right-5 z-50 flex flex-col gap-2 max-w-sm w-full pointer-events-none"></div>
+
+    <!-- Navigation Header -->
+    <header class="sticky top-0 z-40 bg-navy-900 text-white shadow-md border-b border-navy-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-16 sm:h-20">
+                <!-- Brand Logo -->
+                <div class="flex items-center gap-3 cursor-pointer" onclick="app.navigate('landing')">
+                    <div class="w-10 h-10 rounded-xl bg-brand-blue flex items-center justify-center text-white shadow-lg shadow-brand-blue/30 font-bold text-xl tracking-wider">
+                        F's
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-xl sm:text-2xl font-black tracking-tight text-white">Finder's</span>
+                            <span class="text-xs px-2 py-0.5 bg-brand-blue/30 text-blue-300 font-semibold rounded-full border border-blue-400/20">PRO</span>
+                        </div>
+                        <p class="hidden sm:block text-[11px] text-cool-400 tracking-wide font-medium">Find the right person for the job.</p>
+                    </div>
+                </div>
+
+                <!-- Desktop Nav Links -->
+                <nav id="desktopNav" class="hidden md:flex items-center gap-6 text-sm font-medium text-cool-300">
+                    <!-- Dynamic Links injected by JS -->
+                </nav>
+
+                <!-- Header Actions & Auth Status -->
+                <div id="headerActions" class="flex items-center gap-3">
+                    <!-- Dynamic Auth Actions injected by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Notification Tray Dropdown -->
+        <div id="notifDropdown" class="hidden absolute right-4 sm:right-16 top-18 w-80 sm:w-96 bg-white text-navy-900 rounded-2xl shadow-2xl border border-cool-200 z-50 overflow-hidden animate-fadeIn">
+            <div class="p-3.5 bg-cool-50 border-b border-cool-200 flex items-center justify-between">
+                <span class="font-bold text-sm text-navy-900 flex items-center gap-2">
+                    <i data-lucide="bell" class="w-4 h-4 text-brand-blue"></i> Notifications
+                </span>
+                <button onclick="app.markNotificationsRead()" class="text-xs text-brand-blue font-semibold hover:underline">Mark all read</button>
+            </div>
+            <div id="notifList" class="max-h-80 overflow-y-auto divide-y divide-cool-100">
+                <!-- Notifications injected dynamically -->
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Dynamic Application Container -->
+    <main id="appContainer" class="flex-grow flex flex-col">
+        <!-- Rendered dynamically by app.js based on state.view -->
+        <div class="flex items-center justify-center min-h-[60vh]">
+            <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-brand-blue"></div>
+        </div>
+    </main>
+
+    <!-- Mobile Bottom Navigation Bar (Visible on small screens when logged in) -->
+    <nav id="mobileBottomNav" class="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-cool-200 z-30 px-2 py-2 flex justify-around shadow-lg">
+        <!-- Injected dynamically based on role -->
+    </nav>
+
+    <!-- Modal Container for Request Flow, Worker Profile, Chat, Review, Login -->
+    <div id="modalOverlay" class="fixed inset-0 bg-navy-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-6 hidden animate-fadeIn">
+        <div id="modalContent" class="bg-white w-full max-w-2xl rounded-2xl shadow-2xl border border-cool-200 overflow-hidden max-h-[92vh] flex flex-col">
+            <!-- Modal Body injected dynamically -->
+        </div>
+    </div>
+
+    <!-- Application Script -->
+    <script src="/app.js"></script>
+</body>
+</html>
