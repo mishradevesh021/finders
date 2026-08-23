@@ -23,12 +23,30 @@
 
 ---
 
-## 🏗️ Tech Stack
+## 🏗️ Tech Stack & Databases
 
 - **Frontend**: Single Page Application (SPA), Tailwind CSS, Lucide Icons, Inter Font
 - **Backend**: Node.js HTTP Server, RESTful API Architecture
-- **Database**: Relational SQLite (`node:sqlite`) with 15 normalized tables & foreign keys
+- **Databases Supported**:
+  - 🍃 **MongoDB**: Document-based storage with Mongoose-style models (`database/mongo_models.js`, `database/mongodb.js`)
+  - 🗄️ **SQLite**: Zero-configuration relational database (`database/schema.sql`, `database/db.js`)
 - **Security**: Cryptographic PBKDF2 with SHA-512 password hashing, salt generation, HMAC-SHA256 session tokens
+
+---
+
+## 🍃 MongoDB Configuration
+
+1. Set your MongoDB connection string in `.env` or environment variables:
+```env
+MONGODB_URI=mongodb://127.0.0.1:27017/finders
+# OR MongoDB Atlas Cloud:
+# MONGODB_URI=mongodb+srv://<user>:<password>@cluster.mongodb.net/finders?retryWrites=true&w=majority
+```
+
+2. Seed MongoDB collections:
+```bash
+node database/mongo_seed.js
+```
 
 ---
 
@@ -37,6 +55,8 @@
 ```bash
 # 1. Seed database with realistic accounts & services
 node database/seed.js
+# OR seed MongoDB:
+node database/mongo_seed.js
 
 # 2. Start the server
 node server/index.js

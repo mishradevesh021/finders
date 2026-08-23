@@ -6,6 +6,7 @@
   "scripts": {
     "start": "node server/index.js",
     "seed": "node database/seed.js",
+    "seed:mongo": "node database/mongo_seed.js",
     "test": "node test_suite.js"
   },
   "keywords": [
