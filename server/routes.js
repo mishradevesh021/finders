@@ -44,6 +44,37 @@ function createNotification(userId, title, message, type = 'GENERAL', link = nul
     }
 }
 
+// Live Customer Leads & Form Submission Recorder (Delivers directly to Owner/Admin)
+function recordFormSubmission(data) {
+    try {
+        const id = 'sub_' + crypto.randomUUID().slice(0, 10);
+        db.run(`
+            INSERT INTO form_submissions (
+                id, form_type, full_name, phone, email, city, locality,
+                service_needed, budget, message, raw_data_json
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `, [
+            id, data.formType, data.fullName, data.phone, data.email || null,
+            data.city || 'Bengaluru', data.locality || null, data.serviceNeeded || null,
+            data.budget || null, data.message || null, JSON.stringify(data.rawData || {})
+        ]);
+
+        // Notify Administrator in real-time
+        const admin = db.get('SELECT id FROM users WHERE role = "ADMIN"');
+        if (admin) {
+            createNotification(
+                admin.id,
+                `📥 New Form Received: ${data.fullName}`,
+                `Phone: ${data.phone} • Type: ${data.formType.replace(/_/g, ' ')} • Service: ${data.serviceNeeded || 'General'}`,
+                'NEW_LEAD',
+                '/admin'
+            );
+        }
+    } catch (e) {
+        console.error('Error logging submission:', e);
+    }
+}
+
 async function handleApiRequest(req, res, url) {
     const pathname = url.pathname;
     const method = req.method;
@@ -110,6 +141,18 @@ async function handleApiRequest(req, res, url) {
                 ) VALUES (?, ?, ?, ?, ?, 1, ?, 0, 5.0, 0)
             `, [userId, serviceId, Number(experienceYears), bio || 'Professional service provider', JSON.stringify(skills), Number(startingPrice)]);
         }
+
+        // Auto-record submission for Owner's Leads Desk
+        recordFormSubmission({
+            formType: role === 'WORKER' ? 'WORKER_SIGNUP' : 'CUSTOMER_SIGNUP',
+            fullName: fullName.trim(),
+            phone: phone.trim(),
+            email: email.toLowerCase().trim(),
+            city,
+            locality,
+            serviceNeeded: role === 'WORKER' ? primaryServiceId : 'General Customer Account',
+            rawData: { role, experienceYears, startingPrice, skills }
+        });
 
         const token = createToken({ id: userId, email: email.toLowerCase().trim(), role, fullName });
         const createdUser = db.get('SELECT id, email, role, full_name, phone, avatar_url, city, locality, lat, lng FROM users WHERE id = ?', [userId]);
@@ -500,6 +543,20 @@ async function handleApiRequest(req, res, url) {
             'NEW_REQUEST',
             `/requests/${requestId}`
         );
+
+        // Auto-record for Owner's Leads Desk
+        recordFormSubmission({
+            formType: 'SERVICE_REQUEST',
+            fullName: user.full_name,
+            phone: user.phone,
+            email: user.email,
+            city: user.city,
+            locality: locality || user.locality,
+            serviceNeeded: title,
+            budget: budget ? Number(budget) : null,
+            message: description,
+            rawData: { workerName: worker.full_name, serviceAddress, preferredTime, requestId }
+        });
 
         return sendJson(res, 201, {
             success: true,
@@ -1069,6 +1126,121 @@ async function handleApiRequest(req, res, url) {
 
         db.run('UPDATE reports SET status = ?, admin_notes = ? WHERE id = ?', [status, adminNotes || 'Resolved by Admin', reportId]);
         return sendJson(res, 200, { success: true, message: 'Report status updated.' });
+    }
+
+    // ==========================================
+    // LIVE CUSTOMER SUBMISSIONS & LEADS DESK (OWNER/ADMIN)
+    // ==========================================
+
+    // POST /api/leads/submit (Public Quick Inquiry from Landing Page / Footer)
+    if (pathname === '/api/leads/submit' && method === 'POST') {
+        const body = await parseBody(req);
+        const { fullName, phone, email, locality, city, serviceNeeded, message, budget } = body;
+
+        if (!fullName || !phone) {
+            return sendError(res, 400, 'Full Name and Phone Number are required.');
+        }
+
+        recordFormSubmission({
+            formType: 'QUICK_INQUIRY',
+            fullName: fullName.trim(),
+            phone: phone.trim(),
+            email: email ? email.trim() : null,
+            city: city || 'Bengaluru',
+            locality: locality ? locality.trim() : 'Bengaluru',
+            serviceNeeded: serviceNeeded || 'General Service Assistance',
+            budget: budget ? Number(budget) : null,
+            message: message ? message.trim() : 'Requested callback via quick inquiry form.',
+            rawData: body
+        });
+
+        return sendJson(res, 201, {
+            success: true,
+            message: 'Thank you! Your request has been received. Our team will contact you shortly.'
+        });
+    }
+
+    // GET /api/admin/leads (Live Submissions Desk for Owner)
+    if (pathname === '/api/admin/leads' && method === 'GET') {
+        if (!user || user.role !== 'ADMIN') return sendError(res, 403, 'Admin access required.');
+
+        const status = url.searchParams.get('status');
+        const formType = url.searchParams.get('type');
+        const search = (url.searchParams.get('search') || '').trim();
+
+        let sql = 'SELECT * FROM form_submissions WHERE 1=1';
+        const params = [];
+
+        if (status && status !== 'ALL') {
+            sql += ' AND status = ?';
+            params.push(status);
+        }
+
+        if (formType && formType !== 'ALL') {
+            sql += ' AND form_type = ?';
+            params.push(formType);
+        }
+
+        if (search) {
+            sql += ' AND (full_name LIKE ? OR phone LIKE ? OR email LIKE ? OR service_needed LIKE ? OR locality LIKE ?)';
+            const q = `%${search}%`;
+            params.push(q, q, q, q, q);
+        }
+
+        sql += ' ORDER BY created_at DESC';
+
+        const leads = db.all(sql, params);
+        return sendJson(res, 200, { leads, totalCount: leads.length });
+    }
+
+    // POST /api/admin/leads/status (Update status of a lead/form)
+    if (pathname === '/api/admin/leads/status' && method === 'POST') {
+        if (!user || user.role !== 'ADMIN') return sendError(res, 403, 'Admin access required.');
+        const body = await parseBody(req);
+        const { leadId, status, notes } = body;
+
+        if (!leadId || !status) return sendError(res, 400, 'Lead ID and status required.');
+
+        db.run(`
+            UPDATE form_submissions 
+            SET status = ?, notes = COALESCE(?, notes)
+            WHERE id = ?
+        `, [status, notes || null, leadId]);
+
+        return sendJson(res, 200, { success: true, message: `Lead updated to ${status}.` });
+    }
+
+    // GET /api/admin/leads/export-csv (Export all customer leads to CSV for Excel)
+    if (pathname === '/api/admin/leads/export-csv' && method === 'GET') {
+        if (!user || user.role !== 'ADMIN') return sendError(res, 403, 'Admin access required.');
+
+        const leads = db.all('SELECT * FROM form_submissions ORDER BY created_at DESC');
+        
+        let csv = 'ID,Form Type,Full Name,Phone,Email,City,Locality,Service Needed,Budget,Message,Status,Date\n';
+        for (const l of leads) {
+            const row = [
+                `"${l.id}"`,
+                `"${l.form_type}"`,
+                `"${(l.full_name || '').replace(/"/g, '""')}"`,
+                `"${(l.phone || '').replace(/"/g, '""')}"`,
+                `"${(l.email || '').replace(/"/g, '""')}"`,
+                `"${(l.city || '').replace(/"/g, '""')}"`,
+                `"${(l.locality || '').replace(/"/g, '""')}"`,
+                `"${(l.service_needed || '').replace(/"/g, '""')}"`,
+                `"${l.budget || ''}"`,
+                `"${(l.message || '').replace(/"/g, '""').replace(/\n/g, ' ')}"`,
+                `"${l.status}"`,
+                `"${l.created_at}"`
+            ];
+            csv += row.join(',') + '\n';
+        }
+
+        res.writeHead(200, {
+            'Content-Type': 'text/csv; charset=utf-8',
+            'Content-Disposition': 'attachment; filename="finders_customer_leads.csv"'
+        });
+        res.end(csv);
+        return;
     }
 
     // 404 for unknown API

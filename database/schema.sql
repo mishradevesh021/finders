@@ -247,3 +247,25 @@ CREATE TABLE IF NOT EXISTS admin_actions (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY(admin_id) REFERENCES users(id)
 );
+
+-- 16. Form Submissions & Live Customer Leads Desk (Comes directly to Owner)
+CREATE TABLE IF NOT EXISTS form_submissions (
+    id TEXT PRIMARY KEY,
+    form_type TEXT NOT NULL CHECK(form_type IN ('CUSTOMER_SIGNUP', 'WORKER_SIGNUP', 'SERVICE_REQUEST', 'QUICK_INQUIRY', 'VERIFICATION_SUBMISSION')),
+    full_name TEXT NOT NULL,
+    phone TEXT NOT NULL,
+    email TEXT,
+    city TEXT DEFAULT 'Bengaluru',
+    locality TEXT,
+    service_needed TEXT,
+    budget REAL,
+    message TEXT,
+    status TEXT NOT NULL DEFAULT 'NEW' CHECK(status IN ('NEW', 'CONTACTED', 'IN_PROGRESS', 'RESOLVED', 'CONVERTED')),
+    notes TEXT,
+    raw_data_json TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE INDEX IF NOT EXISTS idx_leads_status ON form_submissions(status);
+CREATE INDEX IF NOT EXISTS idx_leads_type ON form_submissions(form_type);
+

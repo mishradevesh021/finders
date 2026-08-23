@@ -484,6 +484,76 @@ const app = {
                 </div>
             </section>
 
+            <!-- Quick Customer Service Inquiry / Instant Callback Form -->
+            <section id="quick-inquiry" class="py-14 bg-brand-blueBg/50 border-t border-blue-100 px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto bg-white p-6 sm:p-8 rounded-3xl border border-blue-200 shadow-xl">
+                    <div class="text-center max-w-xl mx-auto mb-6">
+                        <span class="text-xs font-bold text-brand-blue uppercase tracking-widest">Instant Assistance</span>
+                        <h2 class="text-2xl font-black text-navy-900 mt-1">Need a Quick Callback or Custom Quote?</h2>
+                        <p class="text-xs text-cool-500 mt-1">Leave your contact details and service requirements. Our local team will connect with you right away.</p>
+                    </div>
+
+                    <form onsubmit="app.submitQuickInquiry(event)" class="space-y-4 text-xs">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label class="block font-bold text-navy-900 mb-1">Your Full Name *</label>
+                                <input type="text" id="inqName" placeholder="e.g. Ananya Sharma" required
+                                    class="w-full px-3.5 py-2.5 rounded-xl border border-cool-200 bg-cool-50 focus:bg-white focus:border-brand-blue focus:outline-none font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-navy-900 mb-1">Phone Number (with WhatsApp) *</label>
+                                <input type="tel" id="inqPhone" placeholder="+91 98765 43210" required
+                                    class="w-full px-3.5 py-2.5 rounded-xl border border-cool-200 bg-cool-50 focus:bg-white focus:border-brand-blue focus:outline-none font-medium">
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                            <div>
+                                <label class="block font-bold text-navy-900 mb-1">Email Address</label>
+                                <input type="email" id="inqEmail" placeholder="your@email.com"
+                                    class="w-full px-3.5 py-2.5 rounded-xl border border-cool-200 bg-cool-50 focus:bg-white focus:border-brand-blue focus:outline-none font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-navy-900 mb-1">Locality / Neighborhood *</label>
+                                <input type="text" id="inqLocality" value="Indiranagar, Bengaluru" required
+                                    class="w-full px-3.5 py-2.5 rounded-xl border border-cool-200 bg-cool-50 focus:bg-white focus:border-brand-blue focus:outline-none font-medium">
+                            </div>
+                            <div>
+                                <label class="block font-bold text-navy-900 mb-1">Service Needed *</label>
+                                <select id="inqService" class="w-full px-3.5 py-2.5 rounded-xl border border-cool-200 bg-cool-50 focus:bg-white focus:border-brand-blue focus:outline-none font-medium">
+                                    <option value="⚡ Electrical Repair">⚡ Electrical Repair</option>
+                                    <option value="🔧 Plumbing Service">🔧 Plumbing Service</option>
+                                    <option value="❄️ AC Servicing & Repair">❄️ AC Servicing & Repair</option>
+                                    <option value="🪚 Carpentry Work">🪚 Carpentry Work</option>
+                                    <option value="🧹 Deep Cleaning">🧹 Deep Cleaning</option>
+                                    <option value="🏍️ Bike / Car Mechanic">🏍️ Bike / Car Mechanic</option>
+                                    <option value="🎨 Painting Work">🎨 Painting Work</option>
+                                    <option value="📺 Appliance Repair">📺 Appliance Repair</option>
+                                    <option value="📡 CCTV & Wi-Fi">📡 CCTV & Wi-Fi</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="block font-bold text-navy-900 mb-1">Problem Description or Notes</label>
+                            <textarea id="inqMessage" rows="2" placeholder="Briefly describe what needs to be fixed or installed..."
+                                class="w-full px-3.5 py-2.5 rounded-xl border border-cool-200 bg-cool-50 focus:bg-white focus:border-brand-blue focus:outline-none font-medium"></textarea>
+                        </div>
+
+                        <div class="flex items-center justify-between pt-2">
+                            <span class="text-[11px] text-cool-500 flex items-center gap-1">
+                                <i data-lucide="lock" class="w-3.5 h-3.5 text-green-600"></i>
+                                Your inquiry goes straight to our platform dispatch team.
+                            </span>
+                            <button type="submit" class="px-6 py-3 bg-brand-blue hover:bg-brand-blueDark text-white font-bold rounded-xl shadow-md transition flex items-center gap-2">
+                                <span>Request Instant Callback</span>
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+
             <!-- Become a Worker CTA Banner -->
             <section class="py-12 bg-cool-100 border-t border-cool-200 px-4 sm:px-6 lg:px-8">
                 <div class="max-w-5xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-6">
@@ -1751,14 +1821,17 @@ const app = {
                 </div>
 
                 <!-- Tab Navigation for Admin -->
-                <div class="bg-white p-1 rounded-2xl border border-cool-200 flex gap-2 mb-6 max-w-lg text-xs font-bold">
-                    <button onclick="app.switchAdminTab('verifications')" id="tabBtnVerifications" class="flex-1 py-2.5 rounded-xl bg-navy-900 text-white">
+                <div class="bg-white p-1 rounded-2xl border border-cool-200 flex flex-wrap gap-2 mb-6 max-w-2xl text-xs font-bold">
+                    <button onclick="app.switchAdminTab('leads')" id="tabBtnLeads" class="flex-1 py-2.5 px-3 rounded-xl bg-navy-900 text-white flex items-center justify-center gap-1.5 shadow-sm">
+                        <span>📥 Live Customer Forms & Leads</span>
+                    </button>
+                    <button onclick="app.switchAdminTab('verifications')" id="tabBtnVerifications" class="flex-1 py-2.5 px-3 rounded-xl text-cool-600 hover:bg-cool-50">
                         Verification Queue
                     </button>
-                    <button onclick="app.switchAdminTab('users')" id="tabBtnUsers" class="flex-1 py-2.5 rounded-xl text-cool-600 hover:bg-cool-50">
+                    <button onclick="app.switchAdminTab('users')" id="tabBtnUsers" class="flex-1 py-2.5 px-3 rounded-xl text-cool-600 hover:bg-cool-50">
                         User Moderation
                     </button>
-                    <button onclick="app.switchAdminTab('reports')" id="tabBtnReports" class="flex-1 py-2.5 rounded-xl text-cool-600 hover:bg-cool-50">
+                    <button onclick="app.switchAdminTab('reports')" id="tabBtnReports" class="flex-1 py-2.5 px-3 rounded-xl text-cool-600 hover:bg-cool-50">
                         Safety Reports
                     </button>
                 </div>
@@ -1770,7 +1843,7 @@ const app = {
             </div>
         `;
         await this.loadAdminStats();
-        await this.switchAdminTab('verifications');
+        await this.switchAdminTab('leads');
     },
 
     async loadAdminStats() {
@@ -1807,13 +1880,13 @@ const app = {
     },
 
     async switchAdminTab(tab) {
-        ['Verifications', 'Users', 'Reports'].forEach(t => {
+        ['Leads', 'Verifications', 'Users', 'Reports'].forEach(t => {
             const btn = document.getElementById(`tabBtn${t}`);
             if (btn) {
                 if (t.toLowerCase() === tab) {
-                    btn.className = 'flex-1 py-2.5 rounded-xl bg-navy-900 text-white font-bold';
+                    btn.className = 'flex-1 py-2.5 px-3 rounded-xl bg-navy-900 text-white font-bold shadow-sm';
                 } else {
-                    btn.className = 'flex-1 py-2.5 rounded-xl text-cool-600 hover:bg-cool-50 font-bold';
+                    btn.className = 'flex-1 py-2.5 px-3 rounded-xl text-cool-600 hover:bg-cool-50 font-bold';
                 }
             }
         });
@@ -1821,7 +1894,9 @@ const app = {
         const content = document.getElementById('adminTabContent');
         if (!content) return;
 
-        if (tab === 'verifications') {
+        if (tab === 'leads') {
+            await this.renderAdminLeadsTab();
+        } else if (tab === 'verifications') {
             const data = await this.api('/api/admin/verifications');
             const list = data.verifications || [];
             content.innerHTML = `
@@ -1932,13 +2007,199 @@ const app = {
         }
     },
 
-    async adminToggleSuspend(userId) {
+    async renderAdminLeadsTab() {
+        const content = document.getElementById('adminTabContent');
+        if (!content) return;
+
+        content.innerHTML = `
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
+                <div>
+                    <h3 class="font-black text-base text-navy-900 flex items-center gap-2">
+                        <span>Live Incoming Customer Submissions & Leads Desk</span>
+                        <span class="text-xs px-2.5 py-0.5 bg-green-100 text-green-800 font-bold rounded-full">Real-Time</span>
+                    </h3>
+                    <p class="text-xs text-cool-500 mt-0.5">Every customer signup, worker registration, service request, and quick inquiry reaches here instantly.</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <a href="/api/admin/leads/export-csv" target="_blank" download="finders_customer_leads.csv" class="px-4 py-2 bg-white border border-cool-200 hover:bg-cool-50 text-navy-900 font-bold rounded-xl text-xs flex items-center gap-1.5 shadow-sm">
+                        <i data-lucide="download" class="w-4 h-4 text-brand-blue"></i>
+                        <span>Export to CSV (Excel)</span>
+                    </a>
+                    <button onclick="app.renderAdminLeadsTab()" class="px-3 py-2 bg-cool-100 hover:bg-cool-200 text-cool-700 font-bold rounded-xl text-xs flex items-center gap-1">
+                        <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Filter and Search Bar -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+                <input type="text" id="leadSearchInput" oninput="app.filterLeadsList()" placeholder="🔍 Search by name, phone, email, or service..."
+                    class="px-3.5 py-2.5 rounded-xl border border-cool-200 bg-cool-50 text-xs font-medium focus:bg-white focus:outline-none focus:border-brand-blue">
+                <select id="leadTypeFilter" onchange="app.filterLeadsList()" class="px-3.5 py-2.5 rounded-xl border border-cool-200 bg-cool-50 text-xs font-medium focus:outline-none">
+                    <option value="ALL">All Submission Types</option>
+                    <option value="QUICK_INQUIRY">Quick Inquiries / Callbacks</option>
+                    <option value="SERVICE_REQUEST">Direct Service Bookings</option>
+                    <option value="CUSTOMER_SIGNUP">Customer Signups</option>
+                    <option value="WORKER_SIGNUP">Worker Applications</option>
+                </select>
+                <select id="leadStatusFilter" onchange="app.filterLeadsList()" class="px-3.5 py-2.5 rounded-xl border border-cool-200 bg-cool-50 text-xs font-medium focus:outline-none">
+                    <option value="ALL">All Statuses</option>
+                    <option value="NEW">🟢 New / Uncontacted</option>
+                    <option value="CONTACTED">📞 Contacted</option>
+                    <option value="IN_PROGRESS">⚡ In Progress</option>
+                    <option value="CONVERTED">🎉 Converted / Completed</option>
+                </select>
+            </div>
+
+            <div id="adminLeadsListContainer" class="space-y-4">
+                <div class="text-center py-8 text-xs text-cool-400">Loading incoming customer leads...</div>
+            </div>
+        `;
+        if (window.lucide) lucide.createIcons();
+        await this.fetchAdminLeads();
+    },
+
+    async fetchAdminLeads() {
+        const container = document.getElementById('adminLeadsListContainer');
+        if (!container) return;
         try {
-            const res = await this.api('/api/admin/users/toggle-suspend', 'POST', { userId });
+            const data = await this.api('/api/admin/leads');
+            this.state.adminLeads = data.leads || [];
+            this.renderLeadsCards(this.state.adminLeads);
+        } catch (e) {
+            container.innerHTML = `<div class="text-xs text-red-500 text-center">${e.message}</div>`;
+        }
+    },
+
+    filterLeadsList() {
+        const search = (document.getElementById('leadSearchInput')?.value || '').toLowerCase().trim();
+        const type = document.getElementById('leadTypeFilter')?.value || 'ALL';
+        const status = document.getElementById('leadStatusFilter')?.value || 'ALL';
+
+        let filtered = this.state.adminLeads || [];
+        if (type !== 'ALL') filtered = filtered.filter(l => l.form_type === type);
+        if (status !== 'ALL') filtered = filtered.filter(l => l.status === status);
+        if (search) {
+            filtered = filtered.filter(l => 
+                (l.full_name || '').toLowerCase().includes(search) ||
+                (l.phone || '').toLowerCase().includes(search) ||
+                (l.email || '').toLowerCase().includes(search) ||
+                (l.service_needed || '').toLowerCase().includes(search) ||
+                (l.locality || '').toLowerCase().includes(search)
+            );
+        }
+        this.renderLeadsCards(filtered);
+    },
+
+    renderLeadsCards(leads) {
+        const container = document.getElementById('adminLeadsListContainer');
+        if (!container) return;
+
+        if (leads.length === 0) {
+            container.innerHTML = `
+                <div class="p-8 text-center bg-cool-50 rounded-2xl border border-cool-200">
+                    <i data-lucide="inbox" class="w-10 h-10 text-cool-400 mx-auto mb-2"></i>
+                    <h4 class="font-bold text-xs text-navy-900">No leads match the selected criteria</h4>
+                    <p class="text-[11px] text-cool-500 mt-0.5">Incoming form submissions will populate here automatically.</p>
+                </div>
+            `;
+            if (window.lucide) lucide.createIcons();
+            return;
+        }
+
+        container.innerHTML = leads.map(l => {
+            const cleanPhone = (l.phone || '').replace(/[^0-9]/g, '');
+            const waPhone = cleanPhone.length === 10 ? '91' + cleanPhone : cleanPhone;
+            const waUrl = `https://wa.me/${waPhone}?text=${encodeURIComponent(`Hello ${l.full_name}, this is Finder's Support regarding your service request for ${l.service_needed || 'household services'}.`)}`;
+
+            let badgeClass = 'bg-blue-100 text-blue-800';
+            if (l.form_type === 'QUICK_INQUIRY') badgeClass = 'bg-amber-100 text-amber-800';
+            if (l.form_type === 'SERVICE_REQUEST') badgeClass = 'bg-purple-100 text-purple-800';
+            if (l.form_type === 'WORKER_SIGNUP') badgeClass = 'bg-green-100 text-green-800';
+
+            return `
+                <div class="bg-white p-5 rounded-2xl border ${l.status === 'NEW' ? 'border-brand-blue ring-2 ring-brand-blue/10' : 'border-cool-200'} shadow-sm text-xs">
+                    <div class="flex flex-col sm:flex-row sm:items-start justify-between gap-3">
+                        <div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h4 class="font-black text-sm text-navy-900">${l.full_name}</h4>
+                                <span class="text-[10px] font-black px-2.5 py-0.5 rounded-full ${badgeClass}">
+                                    ${(l.form_type || '').replace(/_/g, ' ')}
+                                </span>
+                                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full ${l.status === 'NEW' ? 'bg-green-100 text-green-700' : 'bg-cool-100 text-cool-600'}">
+                                    Status: ${l.status}
+                                </span>
+                            </div>
+                            <div class="text-cool-500 mt-1 flex items-center gap-4 flex-wrap text-[11px]">
+                                <span>📞 <strong>${l.phone}</strong></span>
+                                ${l.email ? `<span>✉️ ${l.email}</span>` : ''}
+                                <span>📍 ${l.locality || 'Bengaluru'}, ${l.city || 'Bengaluru'}</span>
+                                <span>🕒 ${new Date(l.created_at).toLocaleString()}</span>
+                            </div>
+                        </div>
+
+                        <!-- Direct Usability Actions -->
+                        <div class="flex items-center gap-2 shrink-0 flex-wrap">
+                            <a href="${waUrl}" target="_blank" class="px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl flex items-center gap-1 shadow-sm transition text-[11px]">
+                                <span>WhatsApp</span>
+                            </a>
+                            <a href="tel:${l.phone}" class="px-3 py-1.5 bg-navy-900 hover:bg-navy-800 text-white font-bold rounded-xl flex items-center gap-1 shadow-sm transition text-[11px]">
+                                <span>Call Now</span>
+                            </a>
+                            <select onchange="app.adminUpdateLeadStatus('${l.id}', this.value)" class="px-2 py-1.5 rounded-xl border border-cool-300 bg-cool-50 text-[11px] font-bold">
+                                <option value="NEW" ${l.status === 'NEW' ? 'selected' : ''}>🟢 New</option>
+                                <option value="CONTACTED" ${l.status === 'CONTACTED' ? 'selected' : ''}>📞 Contacted</option>
+                                <option value="IN_PROGRESS" ${l.status === 'IN_PROGRESS' ? 'selected' : ''}>⚡ In Progress</option>
+                                <option value="CONVERTED" ${l.status === 'CONVERTED' ? 'selected' : ''}>🎉 Converted</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="mt-3 pt-3 border-t border-cool-100 bg-cool-50/70 p-3 rounded-xl">
+                        <div class="font-bold text-navy-900 text-[11px] flex items-center justify-between">
+                            <span>Service Needed: <span class="text-brand-blue">${l.service_needed || 'General Inquiry'}</span></span>
+                            ${l.budget ? `<span class="text-green-700 font-black">Budget: ₹${l.budget}</span>` : ''}
+                        </div>
+                        ${l.message ? `<p class="text-cool-600 mt-1 italic text-[11px]">"${l.message}"</p>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+        if (window.lucide) lucide.createIcons();
+    },
+
+    async adminUpdateLeadStatus(leadId, status) {
+        try {
+            await this.api('/api/admin/leads/status', 'POST', { leadId, status });
+            this.showToast(`Lead marked as ${status}`, 'success');
+            await this.fetchAdminLeads();
+        } catch (e) {
+            this.showToast(e.message, 'error');
+        }
+    },
+
+    async submitQuickInquiry(e) {
+        e.preventDefault();
+        const fullName = document.getElementById('inqName').value;
+        const phone = document.getElementById('inqPhone').value;
+        const email = document.getElementById('inqEmail').value;
+        const locality = document.getElementById('inqLocality').value;
+        const serviceNeeded = document.getElementById('inqService').value;
+        const message = document.getElementById('inqMessage').value;
+
+        try {
+            const res = await this.api('/api/leads/submit', 'POST', {
+                fullName,
+                phone,
+                email,
+                locality,
+                serviceNeeded,
+                message
+            });
             this.showToast(res.message, 'success');
-            await this.switchAdminTab('users');
+            e.target.reset();
         } catch (err) {
-            console.error('Suspend error:', err);
+            this.showToast(err.message, 'error');
         }
     },
 

@@ -6,6 +6,7 @@ function seedDatabase() {
 
     // Clean existing tables
     db.exec(`
+        DELETE FROM form_submissions;
         DELETE FROM admin_actions;
         DELETE FROM saved_workers;
         DELETE FROM worker_verifications;
@@ -413,6 +414,15 @@ function seedDatabase() {
         INSERT INTO worker_verifications (id, worker_id, id_type, id_number, document_name, cert_name, status, submitted_at)
         VALUES ('ver_pending_001', ?, 'National ID & Trade Proof', 'ID-88412-PENDING', 'painter_trade_id.pdf', 'Interior Coating Certificate', 'PENDING', datetime('now', '-2 hours'))
     `, [pendingWorkerId]);
+
+    // 7. Seed sample live Form Submissions / Customer Leads for Owner
+    db.run(`
+        INSERT INTO form_submissions (id, form_type, full_name, phone, email, city, locality, service_needed, budget, message, status, created_at)
+        VALUES 
+        ('sub_lead_001', 'QUICK_INQUIRY', 'Ananya Sharma', '+91 98450 12345', 'ananya.s@gmail.com', 'Bengaluru', 'Indiranagar 12th Main', '⚡ Electrical Repair', 500, 'Need an electrician to fix tripping MCB and install 2 ceiling fans.', 'NEW', datetime('now', '-25 minutes')),
+        ('sub_lead_002', 'SERVICE_REQUEST', 'Devesh Mishra', '+91 98765 43210', 'customer@finders.com', 'Bengaluru', 'Domlur', '🔧 Plumbing Service', 850, 'Kitchen sink drain pipe is clogged and leaking under counter.', 'CONTACTED', datetime('now', '-2 hours')),
+        ('sub_lead_003', 'QUICK_INQUIRY', 'Vikramaditya Rao', '+91 97312 99887', 'vikram.rao@outlook.com', 'Bengaluru', 'Koramangala 4th Block', '❄️ AC Servicing & Repair', 1200, 'Split AC cooling is very low, need jet pump deep clean and gas check.', 'NEW', datetime('now', '-4 hours'))
+    `);
 
     console.log("✅ Finder's database successfully seeded!");
     console.log("--------------------------------------------------");
